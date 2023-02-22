@@ -438,7 +438,6 @@ export const createNotebook = async (
     notebookAssembled.metadata.annotations = {};
   }
 
-  notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = 'false';
   const notebookContainers = notebookAssembled.spec.template.spec.containers;
 
   if (!notebookContainers[0]) {
