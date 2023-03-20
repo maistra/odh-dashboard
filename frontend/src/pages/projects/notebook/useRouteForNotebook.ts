@@ -11,6 +11,7 @@ const useRouteForNotebook = (
   const [loaded, setLoaded] = React.useState(false);
   const [loadError, setLoadError] = React.useState<Error | null>(null);
 
+  // ISTIO TODO: investigate where this is used, change link to istiofied.
   React.useEffect(() => {
     let watchHandle;
     let cancelled = false;
