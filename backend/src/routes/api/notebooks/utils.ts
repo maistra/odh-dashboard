@@ -27,7 +27,7 @@ export const getNotebookStatus = async (
   const notebookName = notebook?.metadata.name;
   let newNotebook: Notebook;
   if (isRunning && !notebook?.metadata.annotations?.['opendatahub.io/link']) {
-    const route = await getRoute(fastify, namespace, notebookName).catch((e) => {
+    const route = await getRoute(fastify, "istio-system", "opendatahub-odh-gateway-525eca1d5089dbdc").catch((e) => {
       fastify.log.warn(`Failed getting route ${notebookName}: ${e.message}`);
       return undefined;
     });
@@ -78,7 +78,7 @@ export const patchNotebookRoute = async (
   const patch: RecursivePartial<Notebook> = {
     metadata: {
       annotations: {
-        'opendatahub.io/link': `https://${route.spec.host}/notebook/${namespace}/${name}`,
+        'opendatahub.io/link': `https://${route.spec.host}/notebook/${namespace}/${name}/`,
       },
     },
   };
