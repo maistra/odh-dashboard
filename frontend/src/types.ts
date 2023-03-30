@@ -71,6 +71,7 @@ export type DashboardCommonConfig = {
   disableUserManagement: boolean;
   disableProjects: boolean;
   disableModelServing: boolean;
+  disableServiceMesh: boolean;
   modelMetricsNamespace: string;
 };
 

@@ -18,6 +18,7 @@ export type DashboardConfig = K8sResourceCommon & {
       disableUserManagement: boolean;
       disableProjects: boolean;
       disableModelServing: boolean;
+      disableServiceMesh: boolean;
       modelMetricsNamespace: string;
     };
     groupsConfig?: {
