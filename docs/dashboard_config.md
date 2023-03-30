@@ -18,6 +18,7 @@ The following are a list of features that are supported, along with there defaul
 |  disableAppLauncher | false | Removes the application launcher that is used in OKD environments
 |  disableUserManagement | false | Removes the User Management panel in Settings.
 |  disableProjects | false | Disables Data Science Projects from the dashboard.
+|  disableServiceMesh | true | Disables use of service mesh for routing and authorization.
 |  disableModelServing | false | Disables Model Serving from the dashboard and from Data Science Projects.
 |  modelMetricsNamespace | false | Enables the namespace in which the Model Serving Metrics' Prometheus Operator is installed.
 
