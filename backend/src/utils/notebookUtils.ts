@@ -68,6 +68,54 @@ export const getRoute = async (
   return kubeResponse.body as Route;
 };
 
+interface RouteListResponse {
+  apiVersion: string;
+  kind: string;
+  metadata: {
+    resourceVersion: string;
+  };
+  items: Route[];
+}
+
+export const getGatewayRoute = async (
+  fastify: KubeFastifyInstance,
+  namespace: string,
+  gatewayName: string,
+): Promise<Route> => {
+  const selector = `maistra.io/gateway-name=${gatewayName}`;
+  const kubeResponse = await fastify.kube.customObjectsApi
+    .listNamespacedCustomObject(
+      'route.openshift.io',
+      'v1',
+      namespace,
+      'routes',
+      undefined,
+      undefined,
+      undefined,
+      selector,
+    )
+    .catch((res) => {
+      const e = res.response.body;
+      const error = createCustomError('Error getting Gateway Route', e.message, e.code);
+      fastify.log.error(error);
+      throw error;
+    });
+
+  const body = kubeResponse.body as unknown;
+  const typedResponse = body as RouteListResponse;
+
+  if (typedResponse.items.length === 0) {
+    const error = createCustomError(
+      'Route not found',
+      `Could not find Route with label: ${selector}`,
+      404,
+    );
+    fastify.log.error(error);
+    throw error;
+  }
+  return typedResponse.items[0];
+};
+
 export const createRBAC = async (
   fastify: KubeFastifyInstance,
   namespace: string,
