@@ -210,8 +210,7 @@ export const useNotebookRedirectLink = (): (() => Promise<string>) => {
 
     return new Promise<string>((resolve, reject) => {
       const call = (resolve, reject) => {
-        // hardcoded get route to the odh-gateway
-        getRoute("istio-system", "opendatahub-odh-gateway-525eca1d5089dbdc")
+        getRoute(notebookNamespace, routeName)
           .then((route) => {
             resolve(`https://${route.spec.host}/notebook/${notebookNamespace}/${routeName}/`);
           })

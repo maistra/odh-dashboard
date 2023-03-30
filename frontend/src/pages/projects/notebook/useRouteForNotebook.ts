@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getRoute } from '../../../api';
+import { getGatewayRoute, getRoute } from '../../../api';
 import { FAST_POLL_INTERVAL } from '../../../utilities/const';
 
 const useRouteForNotebook = (
@@ -10,7 +10,6 @@ const useRouteForNotebook = (
   const [loaded, setLoaded] = React.useState(false);
   const [loadError, setLoadError] = React.useState<Error | null>(null);
 
-  // ISTIO TODO: investigate where this is used, change link to istiofied.
   React.useEffect(() => {
     let watchHandle;
     let cancelled = false;
@@ -19,12 +18,12 @@ const useRouteForNotebook = (
         return;
       }
       if (notebookName && projectName) {
-        getRoute(notebookName, projectName)
+        getGatewayRoute("istio-system", "odh-dashboard")
           .then((route) => {
             if (cancelled) {
               return;
             }
-            setRoute(`https://${route.spec.host}/notebook/${projectName}/${notebookName}`);
+            setRoute(`https://${route?.spec.host}/notebook/${projectName}/${notebookName}/`);
             setLoadError(null);
             setLoaded(true);
           })
