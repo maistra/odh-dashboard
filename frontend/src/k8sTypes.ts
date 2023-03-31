@@ -347,6 +347,12 @@ export type RouteKind = K8sResourceCommon & {
   };
 };
 
+export type RouteList = {
+  apiVersion: string;
+  kind: 'RouteList';
+  items: RouteKind[];
+};
+
 export type SecretKind = K8sResourceCommon & {
   metadata: {
     name: string;
