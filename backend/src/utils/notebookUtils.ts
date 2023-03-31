@@ -298,6 +298,8 @@ export const assembleNotebook = async (
     },
   }));
 
+  const serviceMeshEnabled = String(getDashboardConfig().spec?.dashboardConfig?.disableServiceMesh)
+
   return {
     apiVersion: 'kubeflow.org/v1',
     kind: 'Notebook',
@@ -313,6 +315,8 @@ export const assembleNotebook = async (
         'notebooks.opendatahub.io/last-size-selection': notebookSize.name,
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
         'opendatahub.io/username': username,
+        'opendatahub.io/service-mesh': serviceMeshEnabled,
+        'opendatahub.io/hub-host': url,
         'kubeflow-resource-stopped': null,
       },
       name: name,
@@ -488,13 +492,10 @@ export const createNotebook = async (
     notebookAssembled.metadata.annotations = {};
   }
 
-  // If not using service mesh, continue to inject oauth container.
-  if (config.spec.dashboardConfig.disableServiceMesh) {
-    notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = 'true';
-  } else {
-    notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = 'false';
-  }
-
+  notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = String(config.spec.dashboardConfig.disableServiceMesh);
+  notebookAssembled.metadata.annotations['opendatahub.io/service-mesh'] = String(!config.spec.dashboardConfig.disableServiceMesh);
+  notebookAssembled.metadata.annotations['opendatahub.io/hub-url'] = url;
+  
   const notebookContainers = notebookAssembled.spec.template.spec.containers;
 
   if (!notebookContainers[0]) {

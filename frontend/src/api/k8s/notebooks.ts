@@ -69,10 +69,9 @@ const assembleNotebook = (
         'notebooks.opendatahub.io/oauth-logout-url': `${origin}/projects/${projectName}?notebookLogout=${notebookId}`,
         'notebooks.opendatahub.io/last-size-selection': notebookSize.name,
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
-        // Add the inject oauth annotation if use of Service Mesh is disabled
-        ...(dashboardConfig.spec.dashboardConfig.disableServiceMesh
-          ? { 'notebooks.opendatahub.io/inject-oauth': 'true' }
-          : { 'notebooks.opendatahub.io/inject-oauth': 'false' }),
+        'notebooks.opendatahub.io/inject-oauth': String(dashboardConfig.spec.dashboardConfig.disableServiceMesh),
+        'opendatahub.io/service-mesh': String(!dashboardConfig.spec.dashboardConfig.disableServiceMesh),
+        'opendatahub.io/hub-url': origin,
         'opendatahub.io/username': username,
       },
       name: notebookId,
