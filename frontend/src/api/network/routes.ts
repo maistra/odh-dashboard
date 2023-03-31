@@ -1,6 +1,7 @@
 import { k8sGetResource } from '@openshift/dynamic-plugin-sdk-utils';
 import { RouteModel } from '../models';
-import { RouteKind } from '../../k8sTypes';
+import { RouteKind, RouteList } from '../../k8sTypes';
+
 
 export const getRoute = (name: string, namespace: string): Promise<RouteKind> => {
   return k8sGetResource<RouteKind>({ model: RouteModel, queryOptions: { name, ns: namespace } });
@@ -12,6 +13,11 @@ export const getGatewayRoute = (namespace: string, gatewayName: string): Promise
     ns: namespace,
     labelSelector,
   };
-  return k8sGetResource<RouteKind>({ model: RouteModel, queryOptions })
-    .catch(() => null); // Catch errors and return null
+  return k8sGetResource<RouteList>({ model: RouteModel, queryOptions })
+    .then((response) => {
+      console.log(response)
+      const routes = response.items.filter((route) => route.metadata?.labels?.['maistra.io/gateway-name'] === gatewayName);
+      return routes.length > 0 ? routes[0] : null;
+    })
+    .catch(() => null);
 };
