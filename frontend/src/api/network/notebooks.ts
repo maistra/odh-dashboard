@@ -17,8 +17,13 @@ import { translateDisplayNameForK8s } from '../../pages/projects/utils';
 import { assemblePodSpecOptions } from './utils';
 import { getTolerationPatch, TolerationChanges } from '../../utilities/tolerations';
 import { mergeK8sQueryParams } from 'api/apiMergeUtils';
+import { DashboardConfig } from '../../types';
 
-const assembleNotebook = (data: StartNotebookData, username: string): NotebookKind => {
+const assembleNotebook = (
+  data: StartNotebookData,
+  username: string,
+  dashboardConfig: DashboardConfig,
+): NotebookKind => {
   const {
     projectName,
     notebookName,
@@ -63,6 +68,10 @@ const assembleNotebook = (data: StartNotebookData, username: string): NotebookKi
         'notebooks.opendatahub.io/oauth-logout-url': `${origin}/projects/${projectName}?notebookLogout=${notebookId}`,
         'notebooks.opendatahub.io/last-size-selection': notebookSize.name,
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
+        // Add the inject oauth annotation if use of Service Mesh is disabled
+        ...(dashboardConfig.spec.dashboardConfig.disableServiceMesh && {
+          'notebooks.opendatahub.io/inject-oauth': 'true',
+        }),
         'opendatahub.io/username': username,
       },
       name: notebookId,
@@ -195,8 +204,9 @@ export const startNotebook = (
 export const createNotebook = (
   data: StartNotebookData,
   username: string,
+  dashboardConfig: DashboardConfig,
 ): Promise<NotebookKind> => {
-  const notebook = assembleNotebook(data, username);
+  const notebook = assembleNotebook(data, username, dashboardConfig);
 
   return k8sCreateResource<NotebookKind>({
     model: NotebookModel,
@@ -208,9 +218,10 @@ export const updateNotebook = (
   existingNotebook: NotebookKind,
   data: StartNotebookData,
   username: string,
+  dashboardConfig: DashboardConfig,
 ): Promise<NotebookKind> => {
   data.notebookId = existingNotebook.metadata.name;
-  const notebook = assembleNotebook(data, username);
+  const notebook = assembleNotebook(data, username, dashboardConfig);
 
   const oldNotebook = structuredClone(existingNotebook);
   const container = oldNotebook.spec.template.spec.containers[0];
@@ -231,9 +242,10 @@ export const updateNotebook = (
 export const createNotebookWithoutStarting = (
   data: StartNotebookData,
   username: string,
+  dashboardConfig: DashboardConfig,
 ): Promise<NotebookKind> => {
   return new Promise((resolve, reject) =>
-    createNotebook(data, username).then((notebook) =>
+    createNotebook(data, username, dashboardConfig).then((notebook) =>
       setTimeout(
         () =>
           stopNotebook(notebook.metadata.name, notebook.metadata.namespace)

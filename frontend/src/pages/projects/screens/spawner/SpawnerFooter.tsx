@@ -19,7 +19,7 @@ import {
 } from './service';
 import { useUser } from '../../../../redux/selectors';
 import { ProjectDetailsContext } from '../../ProjectDetailsContext';
-import { AppContext } from '../../../../app/AppContext';
+import { AppContext, useAppContext } from '../../../../app/AppContext';
 import { fireTrackingEvent } from '../../../../utilities/segmentIOUtils';
 
 type SpawnerFooterProps = {
@@ -56,6 +56,7 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
     createInProgress ||
     !checkRequiredFieldsForNotebookStart(startNotebookData, storageData, envVariables);
   const { username } = useUser();
+  const { dashboardConfig } = useAppContext();
 
   const afterStart = (name: string, type: 'created' | 'updated') => {
     const { gpus, notebookSize, image } = startNotebookData;
@@ -103,7 +104,7 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
         envFrom,
         tolerationSettings,
       };
-      updateNotebook(editNotebook, newStartNotebookData, username)
+      updateNotebook(editNotebook, newStartNotebookData, username, dashboardConfig)
         .then((notebook) => afterStart(notebook.metadata.name, 'updated'))
         .catch(handleError);
     }
@@ -131,7 +132,7 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
       tolerationSettings,
     };
 
-    createNotebook(newStartData, username)
+    createNotebook(newStartData, username, dashboardConfig)
       .then((notebook) => afterStart(notebook.metadata.name, 'created'))
       .catch(handleError);
   };

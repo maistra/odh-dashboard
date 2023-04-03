@@ -23,7 +23,7 @@ const useRouteForNotebook = (
         // execute getRoute if the feature flag is set to true
         const getRoutePromise = dashboardConfig.spec.dashboardConfig.disableServiceMesh
           ? getRoute(notebookName, projectName)
-          : getGatewayRoute("istio-system", "odh-gateway");
+          : getGatewayRoute('istio-system', 'odh-gateway');
 
         getRoutePromise
           .then((route) => {
@@ -48,7 +48,7 @@ const useRouteForNotebook = (
       cancelled = true;
       clearTimeout(watchHandle);
     };
-  }, [notebookName, projectName]);
+  }, [notebookName, projectName, dashboardConfig]);
 
   return [route, loaded, loadError];
 };
