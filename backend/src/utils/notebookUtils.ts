@@ -491,6 +491,8 @@ export const createNotebook = async (
   // If not using service mesh, continue to inject oauth container.
   if (config.spec.dashboardConfig.disableServiceMesh) {
     notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = 'true';
+  } else {
+    notebookAssembled.metadata.annotations['notebooks.opendatahub.io/inject-oauth'] = 'false';
   }
 
   const notebookContainers = notebookAssembled.spec.template.spec.containers;

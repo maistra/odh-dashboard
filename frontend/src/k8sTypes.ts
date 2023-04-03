@@ -358,11 +358,12 @@ export type RouteKind = K8sResourceCommon & {
   };
 };
 
-export type RouteList = {
-  apiVersion: string;
-  kind: 'RouteList';
-  items: RouteKind[];
-};
+export type List<T> = {
+  apiVersion?: string;
+  kind?: string;
+  metadata: Record<string, unknown>;
+  items: T[];
+} & K8sResourceCommon;
 
 export type SecretKind = K8sResourceCommon & {
   metadata: {

@@ -70,9 +70,9 @@ const assembleNotebook = (
         'notebooks.opendatahub.io/last-size-selection': notebookSize.name,
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
         // Add the inject oauth annotation if use of Service Mesh is disabled
-        ...(dashboardConfig.spec.dashboardConfig.disableServiceMesh && {
-          'notebooks.opendatahub.io/inject-oauth': 'true',
-        }),
+        ...(dashboardConfig.spec.dashboardConfig.disableServiceMesh
+          ? { 'notebooks.opendatahub.io/inject-oauth': 'true' }
+          : { 'notebooks.opendatahub.io/inject-oauth': 'false' }),
         'opendatahub.io/username': username,
       },
       name: notebookId,
