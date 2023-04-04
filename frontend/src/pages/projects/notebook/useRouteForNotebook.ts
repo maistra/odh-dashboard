@@ -21,7 +21,7 @@ const useRouteForNotebook = (
         return;
       }
       if (notebookName && projectName) {
-        // execute getRoute if the feature flag is set to true
+        // if not using service mesh fetch openshift route, otherwise get Istio Ingress Gateway route
         const getRoutePromise = dashboardConfig.spec.dashboardConfig.disableServiceMesh
           ? getRoute(notebookName, projectName)
           : getGatewayRoute('istio-system', 'odh-gateway');
