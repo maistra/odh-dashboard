@@ -2,7 +2,6 @@ import * as React from 'react';
 import { getGatewayRoute, getRoute } from '~/api';
 import { FAST_POLL_INTERVAL } from '~/utilities/const';
 import { useAppContext } from '~/app/AppContext';
-import { DashboardConfig } from '~/types';
 
 const useRouteForNotebook = (
   notebookName?: string,
@@ -54,7 +53,7 @@ const useRouteForNotebook = (
       cancelled = true;
       clearTimeout(watchHandle);
     };
-  }, [notebookName, projectName, isRunning]);
+  }, [notebookName, projectName, isRunning, dashboardConfig]);
 
   return [route, loaded, loadError];
 };

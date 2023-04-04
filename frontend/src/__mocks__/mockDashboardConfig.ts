@@ -23,6 +23,7 @@ export const mockDashboardConfig: DashboardConfig = {
       disableUserManagement: false,
       disableProjects: false,
       disableModelServing: false,
+      disableServiceMesh: true,
       modelMetricsNamespace: 'test-project',
     },
     notebookController: {
