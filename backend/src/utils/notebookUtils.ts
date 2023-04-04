@@ -298,7 +298,9 @@ export const assembleNotebook = async (
     },
   }));
 
-  const serviceMeshEnabled = String(getDashboardConfig().spec?.dashboardConfig?.disableServiceMesh);
+  const serviceMeshEnabled = String(
+    !getDashboardConfig().spec?.dashboardConfig?.disableServiceMesh,
+  );
 
   return {
     apiVersion: 'kubeflow.org/v1',
