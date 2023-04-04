@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Alert, Button, Form, Modal, Stack, StackItem } from '@patternfly/react-core';
 import { useNavigate } from 'react-router-dom';
 import { createProject, updateProject } from '~/api';
-import { AppContext, useAppContext } from '~/app/AppContext';
+import { useAppContext } from '~/app/AppContext';
 import { useUser } from '~/redux/selectors';
 import { ProjectKind } from '~/k8sTypes';
 import {
