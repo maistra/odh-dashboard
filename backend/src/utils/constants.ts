@@ -49,6 +49,7 @@ export const blankDashboardCR: DashboardConfig = {
       disableUserManagement: false,
       disableProjects: false,
       disableModelServing: false,
+      disableServiceMesh: true,
       modelMetricsNamespace: '',
     },
     notebookController: {
