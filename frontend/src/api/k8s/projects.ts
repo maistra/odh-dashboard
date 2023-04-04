@@ -12,7 +12,6 @@ import { ProjectKind } from '~/k8sTypes';
 import { ProjectModel } from '~/api/models';
 import { translateDisplayNameForK8s } from '~/pages/projects/utils';
 import { ODH_PRODUCT_NAME } from '~/utilities/const';
-import { DashboardConfig } from '~/types';
 import { listServingRuntimes } from './servingRuntimes';
 
 export const getProject = (projectName: string): Promise<ProjectKind> =>
@@ -34,7 +33,6 @@ export const createProject = (
   username: string,
   displayName: string,
   description: string,
-  dashboardConfig: DashboardConfig,
   k8sName?: string,
 ): Promise<string> => {
   // Specific types and models for creating projects
@@ -62,11 +60,6 @@ export const createProject = (
         kind: 'ProjectRequest',
         metadata: {
           name: k8sName || translateDisplayNameForK8s(name),
-          annotations: {
-            'opendatahub.io/service-mesh': String(
-              !dashboardConfig.spec.dashboardConfig.disableServiceMesh,
-            ),
-          },
         },
         description,
         displayName,

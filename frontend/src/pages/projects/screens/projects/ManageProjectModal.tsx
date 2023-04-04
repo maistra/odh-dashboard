@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Alert, Button, Form, Modal, Stack, StackItem } from '@patternfly/react-core';
 import { useNavigate } from 'react-router-dom';
 import { createProject, updateProject } from '~/api';
-import { useAppContext } from '~/app/AppContext';
 import { useUser } from '~/redux/selectors';
 import { ProjectKind } from '~/k8sTypes';
 import {
@@ -55,14 +54,13 @@ const ManageProjectModal: React.FC<ManageProjectModalProps> = ({
     setNameDesc({ name: '', k8sName: undefined, description: '' });
   };
 
-  const { dashboardConfig } = useAppContext();
   const submit = () => {
     setFetching(true);
     const { name, description, k8sName } = nameDesc;
     if (editProjectData) {
       updateProject(editProjectData, name, description).then(() => onBeforeClose());
     } else {
-      createProject(username, name, description, dashboardConfig, k8sName)
+      createProject(username, name, description, k8sName)
         .then((projectName) => {
           navigate(`/projects/${projectName}`);
         })
