@@ -16,9 +16,8 @@ import { ROOT_MOUNT_PATH } from '~/pages/projects/pvc/const';
 import { translateDisplayNameForK8s } from '~/pages/projects/utils';
 import { getTolerationPatch, TolerationChanges } from '~/utilities/tolerations';
 import { applyK8sAPIOptions } from '~/api/apiMergeUtils';
-import { assemblePodSpecOptions } from './utils';
-import { mergeK8sQueryParams } from '~/api/apiMergeUtils';
 import { DashboardConfig } from '~/types';
+import { assemblePodSpecOptions } from './utils';
 
 const assembleNotebook = (
   data: StartNotebookData,
@@ -69,8 +68,12 @@ const assembleNotebook = (
         'notebooks.opendatahub.io/oauth-logout-url': `${origin}/projects/${projectName}?notebookLogout=${notebookId}`,
         'notebooks.opendatahub.io/last-size-selection': notebookSize.name,
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
-        'notebooks.opendatahub.io/inject-oauth': String(dashboardConfig.spec.dashboardConfig.disableServiceMesh),
-        'opendatahub.io/service-mesh': String(!dashboardConfig.spec.dashboardConfig.disableServiceMesh),
+        'notebooks.opendatahub.io/inject-oauth': String(
+          dashboardConfig.spec.dashboardConfig.disableServiceMesh,
+        ),
+        'opendatahub.io/service-mesh': String(
+          !dashboardConfig.spec.dashboardConfig.disableServiceMesh,
+        ),
         'opendatahub.io/hub-url': origin,
         'opendatahub.io/username': username,
       },
@@ -240,8 +243,8 @@ export const createNotebookWithoutStarting = (
   data: StartNotebookData,
   username: string,
   dashboardConfig: DashboardConfig,
-): Promise<NotebookKind> => {
-  return new Promise((resolve, reject) =>
+): Promise<NotebookKind> =>
+  new Promise((resolve, reject) =>
     createNotebook(data, username, dashboardConfig).then((notebook) =>
       setTimeout(
         () =>
@@ -252,7 +255,6 @@ export const createNotebookWithoutStarting = (
       ),
     ),
   );
-
 export const deleteNotebook = (notebookName: string, namespace: string): Promise<K8sStatus> =>
   k8sDeleteResource<NotebookKind, K8sStatus>({
     model: NotebookModel,
@@ -423,4 +425,4 @@ export const removeNotebookSecret = (
           .catch(reject);
       })
       .catch(reject);
-  });}
+  });
