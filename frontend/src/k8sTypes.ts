@@ -47,7 +47,6 @@ export type NotebookAnnotations = Partial<{
   'opendatahub.io/link': string; // redirect notebook url
   'opendatahub.io/username': string; // the untranslated username behind the notebook
   'opendatahub.io/service-mesh': string; // Openshift Service Mesh : determines if mesh configuration should be applied
-  'opendatahub.io/hub-url': string; // Openshift Service Mesh : holds origination host for authorization rules
   'notebooks.opendatahub.io/last-image-selection': string; // the last image they selected
   'notebooks.opendatahub.io/last-size-selection': string; // the last notebook size they selected
 }>;

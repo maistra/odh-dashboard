@@ -500,7 +500,6 @@ export const createNotebook = async (
   notebookAssembled.metadata.annotations['opendatahub.io/service-mesh'] = String(
     !config.spec.dashboardConfig.disableServiceMesh,
   );
-  notebookAssembled.metadata.annotations['opendatahub.io/hub-url'] = url;
 
   const notebookContainers = notebookAssembled.spec.template.spec.containers;
 
