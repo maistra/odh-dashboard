@@ -43,7 +43,12 @@ export const getNotebookStatus = async (
       });
     }
     if (route) {
-      newNotebook = await patchNotebookRoute(fastify, route.spec.host, namespace, notebookName).catch((e) => {
+      newNotebook = await patchNotebookRoute(
+        fastify,
+        route.spec.host,
+        namespace,
+        notebookName,
+      ).catch((e) => {
         fastify.log.warn(`Failed patching route to notebook ${notebookName}: ${e.message}`);
         return notebook;
       });
