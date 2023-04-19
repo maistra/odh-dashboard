@@ -17,7 +17,7 @@ export const getRoute = (
 
 export const getServiceMeshGwHost = async (namespace: string): Promise<string | null> => {
   const queryOptions = {
-    ns: namespace,
+    name: namespace,
   };
   const project = await k8sGetResource<NamespaceKind>({ model: NamespaceModel, queryOptions });
   return project?.metadata?.annotations?.['opendatahub.io/service-mesh-gw-host'] || null;
