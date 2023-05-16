@@ -40,6 +40,13 @@ export type PrometheusQueryRangeResultValue = [number, string];
 type NumberString = string;
 export type GpuSettingString = 'autodetect' | 'hidden' | NumberString | undefined;
 
+export type OperatorStatus = {
+  /** Operator is installed and will be cloned to the namespace on creation */
+  available: boolean;
+  /** Has a detection gone underway or is the available a static default */
+  queriedForStatus: boolean;
+};
+
 export type DashboardConfig = K8sResourceCommon & {
   spec: {
     dashboardConfig: DashboardCommonConfig;
@@ -55,6 +62,13 @@ export type DashboardConfig = K8sResourceCommon & {
       notebookNamespace?: string;
       gpuSetting?: GpuSettingString;
       notebookTolerationSettings?: TolerationSettings;
+    };
+    templateOrder?: string[];
+  };
+  /** Faux status object -- computed by the service account */
+  status: {
+    dependencyOperators: {
+      redhatOpenshiftPipelines: OperatorStatus;
     };
   };
 };
@@ -72,7 +86,10 @@ export type DashboardCommonConfig = {
   disableProjects: boolean;
   disableModelServing: boolean;
   disableServiceMesh: boolean;
+  disableProjectSharing: boolean;
+  disableCustomServingRuntimes: boolean;
   modelMetricsNamespace: string;
+  disablePipelines: boolean;
 };
 
 export type NotebookControllerUserState = {
@@ -604,9 +621,12 @@ export type PersistentVolumeClaimList = {
 
 export type Volume = {
   name: string;
-  emptyDir?: Record<string, any>; // eslint-disable-line
+  emptyDir?: Record<string, unknown>;
   persistentVolumeClaim?: {
     claimName: string;
+  };
+  secret?: {
+    secretName: string;
   };
 };
 

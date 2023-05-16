@@ -50,7 +50,10 @@ export const blankDashboardCR: DashboardConfig = {
       disableProjects: false,
       disableModelServing: false,
       disableServiceMesh: true,
+      disableProjectSharing: false,
+      disableCustomServingRuntimes: false,
       modelMetricsNamespace: '',
+      disablePipelines: true,
     },
     notebookController: {
       enabled: true,
@@ -58,6 +61,15 @@ export const blankDashboardCR: DashboardConfig = {
     groupsConfig: {
       adminGroups: 'odh-admins',
       allowedGroups: 'system:authenticated',
+    },
+    templateOrder: [],
+  },
+  status: {
+    dependencyOperators: {
+      redhatOpenshiftPipelines: {
+        available: false,
+        queriedForStatus: false,
+      },
     },
   },
 };

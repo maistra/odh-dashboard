@@ -33,6 +33,7 @@ type SpawnerFooterProps = {
   storageData: StorageData;
   envVariables: EnvVariable[];
   dataConnection: DataConnectionData;
+  canEnablePipelines: boolean;
 };
 
 const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
@@ -40,6 +41,7 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
   storageData,
   envVariables,
   dataConnection,
+  canEnablePipelines,
 }) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const {
@@ -81,7 +83,11 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
     fireTrackingEvent(`Workbench ${type}`, {
       GPU: gpus,
       lastSelectedSize: notebookSize.name,
-      lastSelectedImage: `${image.imageVersion?.from.name}`,
+      lastSelectedImage: image.imageVersion?.from
+        ? `${image.imageVersion.from.name}`
+        : `${image.imageStream?.metadata?.name || 'unknown image'} - ${
+            image.imageVersion?.name || 'unknown version'
+          }`,
       projectName,
       notebookName: name,
     });
@@ -202,7 +208,7 @@ const SpawnerFooter: React.FC<SpawnerFooterProps> = ({
       tolerationSettings,
     };
 
-    createNotebook(newStartData, username, dashboardConfig)
+    createNotebook(newStartData, username, dashboardConfig, canEnablePipelines)
       .then((notebook) => afterStart(notebook.metadata.name, 'created'))
       .catch(handleError);
   };
