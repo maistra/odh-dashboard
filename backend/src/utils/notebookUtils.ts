@@ -318,7 +318,6 @@ export const assembleNotebook = async (
         'notebooks.opendatahub.io/last-image-selection': imageSelection,
         'opendatahub.io/username': username,
         'opendatahub.io/service-mesh': serviceMeshEnabled,
-        'opendatahub.io/hub-host': url,
         'kubeflow-resource-stopped': null,
       },
       name: name,
