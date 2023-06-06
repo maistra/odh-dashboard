@@ -468,19 +468,11 @@ export type ODHSegmentKey = {
   segmentKey: string;
 };
 
-export type BYONImageError = {
-  severity: string;
-  message: string;
-};
-
-export type BYONImageStatus = 'Importing' | 'Validating' | 'Succeeded' | 'Failed';
-
 export type BYONImage = {
   id: string;
-  phase?: BYONImageStatus;
   user?: string;
   uploaded?: Date;
-  error?: BYONImageError;
+  error?: string;
 } & BYONImageCreateRequest &
   BYONImageUpdateRequest;
 
@@ -534,6 +526,14 @@ export type ImageStreamStatusTagItem = {
 export type ImageStreamStatusTag = {
   tag: string;
   items: ImageStreamStatusTagItem[];
+  conditions?: ImageStreamStatusTagCondition[];
+};
+
+export type ImageStreamStatusTagCondition = {
+  type: string;
+  status: string;
+  reason: string;
+  message: string;
 };
 
 export type ImageStreamStatus = {
@@ -593,6 +593,7 @@ export type ImageInfo = {
   default?: boolean;
   order?: number;
   dockerImageRepo?: string;
+  error?: string;
 };
 
 export type ImageType = 'byon' | 'jupyter' | 'other';

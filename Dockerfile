@@ -17,7 +17,7 @@ COPY --chown=default:root ${SOURCE_CODE} /usr/src/app
 # Change file ownership to the assemble user
 USER default
 
-RUN npm cache clean --force 
+RUN npm cache clean --force
 
 RUN npm ci --omit=optional
 
