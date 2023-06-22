@@ -73,14 +73,12 @@ export const getServiceMeshGwHost = async (
   fastify: KubeFastifyInstance,
   namespace: string,
 ): Promise<string> => {
-  const kubeResponse = await fastify.kube.coreV1Api
-    .readNamespace(namespace)
-    .catch((res) => {
-      const e = res.response.body;
-      const error = createCustomError('Error getting Namespace', e.message, e.code);
-      fastify.log.error(error);
-      throw error;
-    });
+  const kubeResponse = await fastify.kube.coreV1Api.readNamespace(namespace).catch((res) => {
+    const e = res.response.body;
+    const error = createCustomError('Error getting Namespace', e.message, e.code);
+    fastify.log.error(error);
+    throw error;
+  });
 
   const body = kubeResponse.body as unknown;
   const typedResponse = body as V1Namespace;
@@ -99,7 +97,6 @@ export const getServiceMeshGwHost = async (
 
   return annotations['service-mesh.opendatahub.io/public-gateway-host-external'];
 };
-
 
 export const createRBAC = async (
   fastify: KubeFastifyInstance,
